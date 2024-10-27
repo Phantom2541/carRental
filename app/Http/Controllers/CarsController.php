@@ -94,7 +94,8 @@ public function update(Request $request, Cars $car)
         'model' => $request->model,
         'brand' => $request->brand,
         'plateNum' => $request->plateNum,
-        'gas' => $request->gas,
+        'gas' => $request->price,
+        'price' => $request->gas,
         'year' => $request->year, // Changed yearModel to year to match the input name
         'is_active' => $request->is_active, // Changed isActive to is_active to match the input name
     ]);

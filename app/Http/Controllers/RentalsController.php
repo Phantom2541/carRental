@@ -6,6 +6,7 @@ use App\Models\Rentals;
 use Illuminate\Http\Request;
 use App\Models\Cars; 
 use App\Models\User; 
+use Carbon\Carbon;
 class RentalsController extends Controller
 {
     /**
@@ -59,17 +60,23 @@ class RentalsController extends Controller
 
 public function store(Request $request)
 {
-    // Validate the request data
+    // Find the car and set its price
+    $car = Cars::findOrFail($request->carId);
+
+    // Validate the request data (without userId)
     $validated = $request->validate([
-        'userId' => 'required|exists:users,id',
         'carId' => 'required|exists:cars,id',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
     ]);
 
+    // Calculate rental days
+    $startDate = Carbon::parse($validated['start_date']);
+    $endDate = Carbon::parse($validated['end_date']);
+    $rentalDays = $startDate->diffInDays($endDate) + 1;
+
     // Check if the car is already booked in the specified date range
     $existingRental = Rentals::where('carId', $validated['carId'])
-        ->where('is_active', 1) // Only consider active rentals
         ->where(function ($query) use ($validated) {
             $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
                   ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']]);
@@ -79,6 +86,10 @@ public function store(Request $request)
     if ($existingRental) {
         return back()->withErrors(['carId' => 'The selected car is already booked for the selected dates.']);
     }
+
+    // Add userId and calculated price to the validated data
+    $validated['userId'] = auth()->id(); // Assign the logged-in user's ID
+    $validated['price'] = $car->price * $rentalDays;
 
     // Create a new rental record in the database
     Rentals::create($validated);
@@ -106,10 +117,11 @@ public function store(Request $request)
      * @param  \App\Models\Rentals  $rentals
      * @return \Illuminate\Http\Response
      */
-    public function edit(Rentals $rentals)
+    public function edit(Rentals $rental)
     {
+          $cars = Cars::all(); // Assuming you want to display available cars to choose from
+    return view('rentals.edit', compact('rental', 'cars'));
         // Return the view for editing the rental
-        return view('rentals.edit', compact('rentals'));
     }
 
     /**
@@ -119,23 +131,35 @@ public function store(Request $request)
      * @param  \App\Models\Rentals  $rentals
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rentals $rentals)
-    {
-        // Validate the request
-        $validated = $request->validate([
-            'carId' => 'required|exists:cars,id',
-            'user_id' => 'required|exists:users,id',
-            'rental_date' => 'required|date',
-            'return_date' => 'required|date|after:rental_date',
-            'price' => 'required|numeric',
-        ]);
 
-        // Update the rental record
-        $rentals->update($validated);
+public function update(Request $request, Rentals $rental)
+{
+    // Validate the request data
+    $validated = $request->validate([
+        'carId' => 'required|exists:cars,id',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+    ]);
 
-        // Redirect to the rentals index with a success message
-        return redirect()->route('rentals.index')->with('success', 'Rental updated successfully.');
-    }
+    // Calculate the number of days between start_date and end_date
+    $startDate = Carbon::parse($validated['start_date']);
+    $endDate = Carbon::parse($validated['end_date']);
+    $rentalDays = $startDate->diffInDays($endDate) + 1;
+
+    // Find the car to get its daily price
+    $car = Cars::findOrFail($validated['carId']);
+    $totalPrice = $car->price * $rentalDays;
+
+    // Set the logged-in user as the renter and add the calculated price
+    $validated['userId'] = auth()->id();
+    $validated['price'] = $totalPrice;
+
+    // Update the rental with the validated data
+    $rental->update($validated);
+
+    return redirect()->route('rentals.index')->with('success', 'Rental updated successfully.');
+}
+
 
     /**
      * Remove the specified resource from storage.

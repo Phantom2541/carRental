@@ -13,8 +13,8 @@
         <div class="mt-4">
             <x-input-label for="name" :value="__('Sex')" />
             <select name="sex" id="sex" class="block mt-1 w-full">
-                <option value="0">Male</option>
-                <option value="1">Female</option>
+                <option value="1">Male</option>
+                <option value="0">Female</option>
             </select>
             <x-input-error :messages="$errors->get('sex')" class="mt-2" />
         </div>

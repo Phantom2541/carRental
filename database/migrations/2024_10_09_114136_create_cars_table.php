@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('plateNum')->nullable();
             $table->string('gas');
             $table->integer('yearModel');
+            $table->integer('price');
             $table->boolean('isActive')->default(true);
             $table->timestamps();
         });
