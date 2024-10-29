@@ -1,69 +1,63 @@
+<!-- resources/views/profile/show.blade.php -->
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Users Management') }}
+            {{ __('Profile') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <!-- Users Table Card -->
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-full">
-                    <h3 class="text-center text-xl mb-4">User List</h3>
-                    <a href="{{ route('users.create') }}" class="btn btn-outline-success mb-4">
-                        <span class="fa fa-plus"></span> Add New User
-                    </a>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="p-6">
+                    @if (session('success'))
+                        <div class="mb-4 font-medium text-sm text-green-600">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $user)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->role }}</td>
-                                <td>
-                                    @if ($user->is_active)
-                                        <span class="text-green-600">Active</span>
-                                    @else
-                                        <span class="text-red-600">Inactive</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <form method="POST" action="{{ route('profile.update') }}">
+                        @csrf
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                <input id="fname" name="fname" type="text" value="{{ old('fname', $user->fname) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required />
+                                @error('name')
+                                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required />
+                                @error('email')
+                                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700">New Password (leave blank to keep current)</label>
+                                <input id="password" name="password" type="password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                                @error('password')
+                                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                                <input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                                Update Profile
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    @section('javascript')
-        <script type="text/javascript">
-            // Add your JavaScript here (optional, if needed for user actions)
-        </script>
-    @endsection
 </x-app-layout>
