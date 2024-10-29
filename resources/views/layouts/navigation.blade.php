@@ -12,7 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
@@ -20,18 +20,18 @@
                     @auth
                         @if(Auth::user()->role === 'admin')
                             <!-- User Management -->
-                            <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                            <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                 {{ __('User Management') }}
                             </x-nav-link>
 
                             <!-- Car Management -->
-                            <x-nav-link :href="route('cars.index')" :active="request()->routeIs('cars.index')">
+                            <x-nav-link :href="route('cars.index')" :active="request()->routeIs('cars.index')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                 {{ __('Car Management') }}
                             </x-nav-link>
                         @endif
 
                         <!-- Rental Management (Visible to all) -->
-                        <x-nav-link :href="route('rentals.index')" :active="request()->routeIs('rentals.index')">
+                        <x-nav-link :href="route('rentals.index')" :active="request()->routeIs('rentals.index')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             {{ __('Rental Management') }}
                         </x-nav-link>
                     @endauth
@@ -43,7 +43,7 @@
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none transition ease-in-out duration-150">
                                 <div>{{ Auth::user()->fname }}</div>
 
                                 <div class="ml-1">
@@ -55,7 +55,7 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
+                            <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
 
@@ -65,7 +65,7 @@
 
                                 <x-dropdown-link :href="route('logout')"
                                         onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
+                                                    this.closest('form').submit();" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
@@ -89,25 +89,25 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
             @auth
                 @if(Auth::user()->role === 'admin')
                     <!-- User Management (Admin only) -->
-                    <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                         {{ __('User') }}
                     </x-responsive-nav-link>
 
                     <!-- Car Management (Admin only) -->
-                    <x-responsive-nav-link :href="route('cars.index')" :active="request()->routeIs('cars.index')">
+                    <x-responsive-nav-link :href="route('cars.index')" :active="request()->routeIs('cars.index')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                         {{ __('Car') }}
                     </x-responsive-nav-link>
                 @endif
 
                 <!-- Rental Management (Visible to all) -->
-                <x-responsive-nav-link :href="route('rentals.index')" :active="request()->routeIs('rentals.index')">
+                <x-responsive-nav-link :href="route('rentals.index')" :active="request()->routeIs('rentals.index')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                     {{ __('Rental') }}
                 </x-responsive-nav-link>
             @endauth
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
+                    <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
@@ -132,7 +132,7 @@
 
                         <x-responsive-nav-link :href="route('logout')"
                                 onclick="event.preventDefault();
-                                            this.closest('form').submit();">
+                                            this.closest('form').submit();" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </form>
