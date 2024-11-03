@@ -47,7 +47,7 @@ class CarsController extends Controller
             'plateNum' => $request->plateNum,
             'gas' => $request->gas,
             'yearModel' => $request->yearModel,
-            'isActive' => $request->has('isActive') ? 1 : 0,
+            'isActive' => $request->isActive == 1 ? 1 : 0,
             'price' => $request->price
         ]);
 

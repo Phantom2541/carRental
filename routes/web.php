@@ -29,6 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('users', UserController::class)->middleware('role:admin');
+
+    Route::resource('cars', CarsController::class)->middleware('role:admin');
+    Route::resource('rentals', RentalsController::class);
+    Route::post('rentals/{id}/approve', [RentalsController::class, 'approve'])->name('rentals.approve')->middleware('role:admin');
 });
 
 // Route::middleware('users')->group(function () {
@@ -41,10 +46,9 @@ Route::middleware('auth')->group(function () {
 
 // Route::get('/users', [UsersController::class, 'index'])->name('users.index');
 // Route::resource('users', UsersController::class);
-Route::resource('users', UserController::class);
-Route::resource('cars', CarsController::class);
-Route::resource('rentals', RentalsController::class);
-Route::post('rentals/{id}/approve', [RentalsController::class, 'approve'])->name('rentals.approve');
 
+Route::fallback(function () {
+    return redirect('/')->with('error', 'Page not found.');
+});
 
 require __DIR__.'/auth.php';

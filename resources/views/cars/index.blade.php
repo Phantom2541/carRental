@@ -11,9 +11,12 @@
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-full">
                     <h3 class="text-center text-xl mb-4">Car List</h3>
+                                     @if(Auth::user()->role === 'admin')
+
                     <a href="{{ route('cars.create') }}" class="btn btn-outline-success mb-4">
                         <span class="fa fa-plus"></span> New Car
                     </a>
+                                    @endif
                   
                     <table class="table">
                         <thead>
@@ -23,7 +26,11 @@
                                 <th>Brand</th>
                                 <th>Year</th>
                                 <th>Status</th>
+                                     @if(Auth::user()->role === 'admin')
+
                                 <th>Actions</th>
+                                    @endif
+
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +47,8 @@
                                         <span class="text-red-600">Unavailable</span>
                                     @endif
                                 </td>
+                                     @if(Auth::user()->role === 'admin')
+
                                 <td>
                                     <a href="{{ route('cars.edit', $car->id) }}" class="btn btn-sm btn-primary">
                                         Edit
@@ -52,6 +61,8 @@
                                         </button>
                                     </form>
                                 </td>
+                                    @endif
+
                             </tr>
                             @endforeach
                         </tbody>

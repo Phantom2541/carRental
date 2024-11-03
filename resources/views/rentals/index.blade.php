@@ -24,6 +24,7 @@
                                 <th>Rental Start Date</th>
                                 <th>Rental End Date</th>
                                 <th>Status</th>
+                                
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -54,12 +55,14 @@
                                         </button>
                                     </form>
                                     @if ($rental->approve !== 'approved')
+                                     @if(Auth::user()->role === 'admin')
                                         <form action="{{ route('rentals.approve', $rental->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Approve this rental?')">
                                                 Approve
                                             </button>
                                         </form>
+                                    @endif
                                     @endif
                                 </td>
                             </tr>
